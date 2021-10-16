@@ -1,0 +1,130 @@
+.btn {
+  font-family: Rogan;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  -webkit-transition: all 350ms ease-out;
+  transition: all 350ms ease-out;
+}
+
+.btn-outline-light {
+  border: 2px solid #FFFFFF;
+  background: transparent;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-primary {
+  display: flex;
+  font-size: 22px;
+  color: #fff;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 24px;
+  background: #9A2938;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary:hover {
+  background: #811927;
+}
+
+.btn-secondary.color-black {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.btn-md-large {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+}
+
+.btn-user {
+  padding: 10px 20px;
+}
+
+.border-2 {
+  border: 2px solid;
+}
+
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.pagination li {
+  background: #1B1B1B;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  margin-right: 8px;
+  font-size: 28px;
+  border: 1px;
+  border-style: solid;
+  border-color: #1b1b1b;
+  text-align: center;
+}
+
+.pagination li a,
+.pagination li span {
+  line-height: 62px;
+  width: 64px;
+  display: block;
+}
+
+.pagination li.active {
+  border-color: #fff;
+}
+
+
+@media (max-width:768px) {
+  .btn {
+    font-size: 20px;
+    line-height: 24px;
+    padding: 14px 20px;
+  }
+
+  .btn-user {
+    font-size: 15px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 0;
+  }
+
+  .pagination li {
+    font-size: 24px;
+    line-height: 29px
+  }
+
+  .pagination li a,
+  .pagination li span {
+    line-height: 52px;
+    width: 52px;
+  }
+
+  .btn-large {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(20px);
+    color: #fff;
+  }
+
+  .btn-large:hover {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+  }
+}

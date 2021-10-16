@@ -1,0 +1,29 @@
+.expert-main-photo img {
+	border-radius: 50%;
+}
+.image-description {
+	font-size: 14px;
+	text-transform: uppercase;
+}
+.geler-expert img{
+	width: 100%;
+}
+.geler-expert .splide__arrow {
+	margin-top: -32px;
+}
+.expert-list-item {
+	padding: 70px 0px;
+	margin: 10px;
+}
+.expert-list-item h2 {
+	margin: 34px 0 0;
+}
+@media (max-width:768px){
+	.expert-list-item {
+		padding: 16px;
+		margin: 10px 0;
+	}
+	.expert-list-item h2 {
+	margin: 20px 0 0;
+}
+}
