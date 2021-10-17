@@ -1,34 +1,41 @@
 // @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
-import { gql, useQuery } from "@apollo/client";
+BigInt.prototype.toJSON = function () { return this.toString() }
+// import { gql, useQuery } from "@apollo/client";
 import type { NextPage } from "next";
-import client from "../lib/apollo-client";
+import { masterclass_masterclass, PrismaClient } from '@prisma/client'
 
-// type Props = {
-//   masterClassList: masterclass_masterclass[];
-// };
+type Props = {
+  masterClassList: masterclass_masterclass[];
+};
 
-export const MASTER_CLASSES = gql`
-  query allMasterClasses {
-    master_classes {
-      id
-      trailer
-      title
-      slug
-      image
-      is_dark_theme
-    }
-  }
-`;
+// export const MASTER_CLASS_LIST_QUERY = gql`
+//   query allMasterClasses {
+//     masterClassList {
+//       id
+//       trailer
+//       title
+//       slug
+//       image
+//       isDarkTheme
+//       dependencies {
+//         id
+//         title
+//       }
+//       targets {
+//         id
+//         title
+//       }
+//     }
+//   }
+// `;
 
-const Home: NextPage<any> = ({ master_classes_static }) => {
-  // const { loading, error, data } = useQuery(MASTER_CLASSES);
+const Home: NextPage<Props> = ({ masterClassList }) => {
+  // const { loading, error, data } = useQuery(MASTER_CLASS_LIST_QUERY);
   // if (error) return <div>Error loading players.</div>;
   // if (loading) return <div>Loading</div>;
 
-  // console.log("master_class_list: ", { data, master_classes_static });
+  // const { masterClassList } = data;
+  console.log("master_class_list: ", masterClassList);
   const backgroundStyle = {
     background: `url('img/header.png')`,
   };
@@ -38,7 +45,7 @@ const Home: NextPage<any> = ({ master_classes_static }) => {
         {/* <div className="banner" style="background: url('img/header.png')"> */}
         <div className="header-title text-center">
           <div className="container">
-            <h1>Инсайты на пути достижений</h1>
+            <h1>Admin</h1>
             <div className="subtitle color-gray max-width d-inline-block">
               Вдохновение и лайфхаки для достижения небывалых высот в карьере,
               бизнесе и жизни
@@ -49,7 +56,7 @@ const Home: NextPage<any> = ({ master_classes_static }) => {
       <div className="container container-masterclass">
         <div className="row">
           <div className="col-md-12 component-masterclass-items color-white">
-            {master_classes_static.map((mc) => (
+            {masterClassList.map((mc) => (
               <p key={`home-mc-${mc.id}`}>{mc.title}</p>
             ))}
             {/* {% for mc in master_class_list %} {% master_class mc %} {% endfor %} */}
@@ -70,16 +77,12 @@ const Home: NextPage<any> = ({ master_classes_static }) => {
 
 export default Home;
 
-export async function getStaticProps({}) {
-  const { data } = await client.query({
-    query: MASTER_CLASSES,
-  });
+export async function getStaticProps() {
+  const prisma = new PrismaClient()
+  const masterClassList = await prisma.masterclass_masterclass.findMany();
   return {
     props: {
-      // masterClassList: data?.master_classes,
-      master_classes_static: data?.master_classes,
+      masterClassList,
     },
   };
-  // const prisma = new PrismaClient();
-  // const masterClassList = await prisma.masterclass_masterclass.findMany();
 }

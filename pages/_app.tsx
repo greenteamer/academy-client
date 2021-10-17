@@ -1,6 +1,3 @@
-// @ts-ignore
-BigInt.prototype.toJSON = function () { return this.toString() }
-
 import "../styles/globals.css";
 
 // add bootstrap css
@@ -24,20 +21,18 @@ import "../styles/ported/video.css";
 import type { AppProps } from "next/app";
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
-import Link from "next/link";
-import { useApollo } from "../lib/apolloClient";
+import client from "../lib/apollo-client";
 import { ApolloProvider } from "@apollo/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    // <ApolloProvider client={apolloClient}>
-    <>
-      <Header />
-      <Component {...pageProps} />
-      <Footer />
-    </>
-    // </ApolloProvider>
+    <ApolloProvider client={client}>
+      <>
+        <Header />
+        <Component {...pageProps} />
+        <Footer />
+      </>
+    </ApolloProvider>
   );
 }
 export default MyApp;
