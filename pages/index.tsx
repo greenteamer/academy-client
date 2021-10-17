@@ -1,34 +1,15 @@
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
-import { gql, useQuery } from "@apollo/client";
+import {
+  masterclass_masterclass,
+  masterclass_masterclass_targets,
+} from ".prisma/client";
 import type { NextPage } from "next";
-import client from "../lib/apollo-client";
+import { PrismaClient } from "@prisma/client";
 
-// type Props = {
-//   masterClassList: masterclass_masterclass[];
-// };
+type Props = {
+  master_classes: masterclass_masterclass[];
+};
 
-export const MASTER_CLASSES = gql`
-  query allMasterClasses {
-    master_classes {
-      id
-      trailer
-      title
-      slug
-      image
-      is_dark_theme
-    }
-  }
-`;
-
-const Home: NextPage<any> = ({ master_classes_static }) => {
-  // const { loading, error, data } = useQuery(MASTER_CLASSES);
-  // if (error) return <div>Error loading players.</div>;
-  // if (loading) return <div>Loading</div>;
-
-  // console.log("master_class_list: ", { data, master_classes_static });
+const Home: NextPage<Props> = ({ master_classes }) => {
   const backgroundStyle = {
     background: `url('img/header.png')`,
   };
@@ -49,7 +30,7 @@ const Home: NextPage<any> = ({ master_classes_static }) => {
       <div className="container container-masterclass">
         <div className="row">
           <div className="col-md-12 component-masterclass-items color-white">
-            {master_classes_static.map((mc) => (
+            {master_classes.map((mc) => (
               <p key={`home-mc-${mc.id}`}>{mc.title}</p>
             ))}
             {/* {% for mc in master_class_list %} {% master_class mc %} {% endfor %} */}
@@ -71,15 +52,13 @@ const Home: NextPage<any> = ({ master_classes_static }) => {
 export default Home;
 
 export async function getStaticProps({}) {
-  const { data } = await client.query({
-    query: MASTER_CLASSES,
+  const prisma = new PrismaClient();
+  const master_classes = await prisma.masterclass_masterclass.findMany({
+    include: { masterclass_masterclass_targets: true },
   });
   return {
     props: {
-      // masterClassList: data?.master_classes,
-      master_classes_static: data?.master_classes,
+      master_classes,
     },
   };
-  // const prisma = new PrismaClient();
-  // const masterClassList = await prisma.masterclass_masterclass.findMany();
 }
