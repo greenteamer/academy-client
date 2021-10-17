@@ -1,37 +1,40 @@
+// @ts-ignore
+BigInt.prototype.toJSON = function () { return this.toString() }
+// import { gql, useQuery } from "@apollo/client";
 import type { NextPage } from "next";
-import { gql, useQuery } from "@apollo/client";
+import { PrismaClient } from '@prisma/client'
 
 type Props = {
-  master_class_list: any[];
+  masterClassList: any[];
 };
 
-export const MASTER_CLASS_LIST_QUERY = gql`
-  query allMasterClasses {
-    masterClassList {
-      id
-      trailer
-      title
-      slug
-      image
-      isDarkTheme
-      dependencies {
-        id
-        title
-      }
-      targets {
-        id
-        title
-      }
-    }
-  }
-`;
+// export const MASTER_CLASS_LIST_QUERY = gql`
+//   query allMasterClasses {
+//     masterClassList {
+//       id
+//       trailer
+//       title
+//       slug
+//       image
+//       isDarkTheme
+//       dependencies {
+//         id
+//         title
+//       }
+//       targets {
+//         id
+//         title
+//       }
+//     }
+//   }
+// `;
 
-const Home: NextPage<Props> = () => {
-  const { loading, error, data } = useQuery(MASTER_CLASS_LIST_QUERY);
-  if (error) return <div>Error loading players.</div>;
-  if (loading) return <div>Loading</div>;
+const Home: NextPage<Props> = ({ masterClassList }) => {
+  // const { loading, error, data } = useQuery(MASTER_CLASS_LIST_QUERY);
+  // if (error) return <div>Error loading players.</div>;
+  // if (loading) return <div>Loading</div>;
 
-  const { masterClassList } = data;
+  // const { masterClassList } = data;
   console.log("master_class_list: ", masterClassList);
   const backgroundStyle = {
     background: `url('img/header.png')`,
@@ -75,9 +78,11 @@ const Home: NextPage<Props> = () => {
 export default Home;
 
 export async function getStaticProps() {
+  const prisma = new PrismaClient()
+  const masterClassList = await prisma.masterclass_masterclass.findMany();
   return {
     props: {
-      master_class_list: [],
+      masterClassList,
     },
   };
 }

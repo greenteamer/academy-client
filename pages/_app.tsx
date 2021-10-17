@@ -1,3 +1,6 @@
+// @ts-ignore
+BigInt.prototype.toJSON = function () { return this.toString() }
+
 import "../styles/globals.css";
 
 // add bootstrap css
@@ -28,11 +31,13 @@ import { ApolloProvider } from "@apollo/client";
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <ApolloProvider client={apolloClient}>
+    // <ApolloProvider client={apolloClient}>
+    <>
       <Header />
       <Component {...pageProps} />
       <Footer />
-    </ApolloProvider>
+    </>
+    // </ApolloProvider>
   );
 }
 export default MyApp;
