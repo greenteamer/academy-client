@@ -69,6 +69,7 @@ export async function getStaticProps() {
       },
       sponsor_adcombinator: {
         select: {
+          is_main: true,
           sponsor_sponsor: true,
           sponsor_sponsortype: true,
         },

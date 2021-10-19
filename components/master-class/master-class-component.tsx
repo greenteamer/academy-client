@@ -29,8 +29,10 @@ export type MasterClass = masterclass_masterclass & {
 export type Props = { mc: MasterClass };
 
 export const MasterclassNameComponent: FC<Props> = ({ mc }) => {
+  console.log(mc.sponsor_adcombinator);
   const mainSponsor = mc.sponsor_adcombinator.find((i) => i.is_main);
   const restSponsors = mc.sponsor_adcombinator.filter((i) => !i.is_main);
+  console.log({ mainSponsor });
   return (
     <div className="m-t-block-mini">
       <div
@@ -84,7 +86,7 @@ export const MasterclassNameComponent: FC<Props> = ({ mc }) => {
             </a>
           </div>
         </div>
-        {true && (
+        {!!mainSponsor && (
           <div
             className="sponsor-block"
             style={{
@@ -104,8 +106,11 @@ export const MasterclassNameComponent: FC<Props> = ({ mc }) => {
                   />
                 </div>
               )}
-              {restSponsors.map((s) => (
-                <div key={s.id} className="sponsor-item">
+              {restSponsors.map((s, idx) => (
+                <div
+                  key={`${idx}-${s.sponsor_sponsor.id}`}
+                  className="sponsor-item"
+                >
                   <span className="d-block">{s.sponsor_sponsor.color}</span>
                   <Image
                     src={`${MEDIA_URL}${s.sponsor_sponsor.logo}`}
