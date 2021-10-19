@@ -110,7 +110,7 @@ model authentication_customuser_user_permissions {
 
 model authentication_phonemodel {
   id         String  @id @db.Uuid
-  phone      Int
+  phone      String  @db.VarChar(16)
   isVerified Boolean
   counter    Int
 }

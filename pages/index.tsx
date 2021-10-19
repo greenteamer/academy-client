@@ -1,22 +1,20 @@
-import {
-  masterclass_masterclass,
-  masterclass_masterclass_targets,
-} from ".prisma/client";
 import type { NextPage } from "next";
 import { PrismaClient } from "@prisma/client";
+import { MasterclassNameComponent } from "../components/master-class";
+import { MasterClass } from "../components/master-class/master-class-component";
 
 type Props = {
-  master_classes: masterclass_masterclass[];
+  master_classes: Array<MasterClass>;
 };
 
 const Home: NextPage<Props> = ({ master_classes }) => {
   const backgroundStyle = {
     background: `url('img/header.png')`,
   };
+  console.log(master_classes);
   return (
     <>
       <div className="banner" style={backgroundStyle}>
-        {/* <div className="banner" style="background: url('img/header.png')"> */}
         <div className="header-title text-center">
           <div className="container">
             <h1>Инсайты на пути достижений</h1>
@@ -30,8 +28,18 @@ const Home: NextPage<Props> = ({ master_classes }) => {
       <div className="container container-masterclass">
         <div className="row">
           <div className="col-md-12 component-masterclass-items color-white">
+            {/* {master_classes.map((mc) => (
+              <>
+                <p key={`home-mc-${mc.id}`}>{mc.title}</p>
+                {mc.masterclass_masterclass_targets.map(
+                  ({ masterclass_masterclasstarget: { title } }) => (
+                    <p key={`home-m-${title}`}>{title}</p>
+                  )
+                )}
+              </>
+            ))} */}
             {master_classes.map((mc) => (
-              <p key={`home-mc-${mc.id}`}>{mc.title}</p>
+              <MasterclassNameComponent key={`mc-${mc.id}`} mc={mc} />
             ))}
             {/* {% for mc in master_class_list %} {% master_class mc %} {% endfor %} */}
             {/* <script>
@@ -51,11 +59,23 @@ const Home: NextPage<Props> = ({ master_classes }) => {
 
 export default Home;
 
-export async function getStaticProps({}) {
+export async function getStaticProps() {
   const prisma = new PrismaClient();
   const master_classes = await prisma.masterclass_masterclass.findMany({
-    include: { masterclass_masterclass_targets: true },
+    include: {
+      expert_expert: true,
+      masterclass_masterclass_targets: {
+        select: { masterclass_masterclasstarget: true },
+      },
+      sponsor_adcombinator: {
+        select: {
+          sponsor_sponsor: true,
+          sponsor_sponsortype: true,
+        },
+      },
+    },
   });
+
   return {
     props: {
       master_classes,
