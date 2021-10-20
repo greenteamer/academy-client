@@ -189,9 +189,12 @@ model expert_expert {
   statistic               String
   achievements            String
   last_content            String
+  category_id             String                    @db.Uuid
+  expert_expertcategory   expert_expertcategory     @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expert_category_id_ff3c1800_fk_expert_expertcategory_id")
   expert_expertimage      expert_expertimage[]
   masterclass_masterclass masterclass_masterclass[]
 
+  @@index([category_id], map: "expert_expert_category_id_ff3c1800")
   @@index([slug], map: "expert_expert_slug_1c4843b2_like")
 }
 
@@ -401,4 +404,10 @@ model videorelease_videorelease {
 
   @@index([master_class_id], map: "videorelease_videorelease_master_class_id_7d98d042")
   @@index([slug], map: "videorelease_videorelease_slug_ff768872_like")
+}
+
+model expert_expertcategory {
+  id            String          @id @db.Uuid
+  title         String          @db.VarChar(255)
+  expert_expert expert_expert[]
 }
