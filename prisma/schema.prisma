@@ -177,92 +177,6 @@ model document_documentcontent {
   @@index([document_id], map: "document_documentcontent_document_id_d105f2d1")
 }
 
-model expert_expert {
-  id                      String                    @id @db.Uuid
-  first_name              String                    @db.VarChar(100)
-  last_name               String                    @db.VarChar(100)
-  slug                    String                    @unique @db.VarChar(255)
-  main_photo              String                    @db.VarChar(100)
-  bio                     String
-  career                  String
-  personal_life           String
-  statistic               String
-  achievements            String
-  last_content            String
-  category_id             String                    @db.Uuid
-  expert_expertcategory   expert_expertcategory     @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expert_category_id_ff3c1800_fk_expert_expertcategory_id")
-  expert_expertimage      expert_expertimage[]
-  masterclass_masterclass masterclass_masterclass[]
-
-  @@index([category_id], map: "expert_expert_category_id_ff3c1800")
-  @@index([slug], map: "expert_expert_slug_1c4843b2_like")
-}
-
-model expert_expertimage {
-  id               String        @id @db.Uuid
-  image            String        @db.VarChar(100)
-  description      String?       @db.VarChar(255)
-  is_content_image Boolean
-  expert_id        String        @db.Uuid
-  expert_expert    expert_expert @relation(fields: [expert_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expertimage_expert_id_03615274_fk_expert_expert_id")
-
-  @@index([expert_id], map: "expert_expertimage_expert_id_03615274")
-}
-
-model masterclass_masterclass {
-  id                                                                                                                     String                                 @id @db.Uuid
-  title                                                                                                                  String                                 @db.VarChar(255)
-  slug                                                                                                                   String                                 @unique @db.VarChar(255)
-  date_created                                                                                                           DateTime                               @db.Date
-  trailer                                                                                                                String                                 @db.VarChar(255)
-  image                                                                                                                  String                                 @db.VarChar(100)
-  is_dark_theme                                                                                                          Boolean
-  expert_id                                                                                                              String                                 @db.Uuid
-  single_ad_id                                                                                                           String?                                @db.Uuid
-  expert_expert                                                                                                          expert_expert                          @relation(fields: [expert_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_masterclass_expert_id_0d4e6fa7_fk_expert_expert_id")
-  sponsor_singlead                                                                                                       sponsor_singlead?                      @relation(fields: [single_ad_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_single_ad_id_42623233_fk_sponsor_s")
-  masterclass_masterclass_dependencies_masterclass_masterclassTomasterclass_masterclass_dependencies_from_masterclass_id masterclass_masterclass_dependencies[] @relation("masterclass_masterclassTomasterclass_masterclass_dependencies_from_masterclass_id")
-  masterclass_masterclass_dependencies_masterclass_masterclassTomasterclass_masterclass_dependencies_to_masterclass_id   masterclass_masterclass_dependencies[] @relation("masterclass_masterclassTomasterclass_masterclass_dependencies_to_masterclass_id")
-  masterclass_masterclass_targets                                                                                        masterclass_masterclass_targets[]
-  review_review                                                                                                          review_review[]
-  sponsor_adcombinator                                                                                                   sponsor_adcombinator[]
-  videorelease_videorelease                                                                                              videorelease_videorelease[]
-
-  @@index([expert_id], map: "masterclass_masterclass_expert_id_0d4e6fa7")
-  @@index([single_ad_id], map: "masterclass_masterclass_single_ad_id_42623233")
-  @@index([slug], map: "masterclass_masterclass_slug_ccc13fcf_like")
-}
-
-model masterclass_masterclass_dependencies {
-  id                                                                                                        Int                     @id @default(autoincrement())
-  from_masterclass_id                                                                                       String                  @db.Uuid
-  to_masterclass_id                                                                                         String                  @db.Uuid
-  masterclass_masterclass_masterclass_masterclassTomasterclass_masterclass_dependencies_from_masterclass_id masterclass_masterclass @relation("masterclass_masterclassTomasterclass_masterclass_dependencies_from_masterclass_id", fields: [from_masterclass_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_from_masterclass_id_091bdc7a_fk_mastercla")
-  masterclass_masterclass_masterclass_masterclassTomasterclass_masterclass_dependencies_to_masterclass_id   masterclass_masterclass @relation("masterclass_masterclassTomasterclass_masterclass_dependencies_to_masterclass_id", fields: [to_masterclass_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_to_masterclass_id_58d77b07_fk_mastercla")
-
-  @@unique([from_masterclass_id, to_masterclass_id], map: "masterclass_masterclass__from_masterclass_id_to_m_15f3776f_uniq")
-  @@index([from_masterclass_id], map: "masterclass_masterclass_de_from_masterclass_id_091bdc7a")
-  @@index([to_masterclass_id], map: "masterclass_masterclass_dependencies_to_masterclass_id_58d77b07")
-}
-
-model masterclass_masterclass_targets {
-  id                            Int                           @id @default(autoincrement())
-  masterclass_id                String                        @db.Uuid
-  masterclasstarget_id          String                        @db.Uuid
-  masterclass_masterclass       masterclass_masterclass       @relation(fields: [masterclass_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_masterclass_id_92f057d0_fk_mastercla")
-  masterclass_masterclasstarget masterclass_masterclasstarget @relation(fields: [masterclasstarget_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_masterclasstarget_id_04d02857_fk_mastercla")
-
-  @@unique([masterclass_id, masterclasstarget_id], map: "masterclass_masterclass__masterclass_id_mastercla_d5c5a848_uniq")
-  @@index([masterclass_id], map: "masterclass_masterclass_targets_masterclass_id_92f057d0")
-  @@index([masterclasstarget_id], map: "masterclass_masterclass_targets_masterclasstarget_id_04d02857")
-}
-
-model masterclass_masterclasstarget {
-  id                              String                            @id @db.Uuid
-  title                           String                            @db.VarChar(255)
-  masterclass_masterclass_targets masterclass_masterclass_targets[]
-}
-
 model news_news {
   id           String   @id @db.Uuid
   title        String   @db.VarChar(255)
@@ -275,12 +189,12 @@ model news_news {
 }
 
 model review_review {
-  id                      String                   @id @db.Uuid
-  name                    String                   @unique @db.VarChar(100)
-  text                    String
-  image                   String                   @db.VarChar(100)
-  master_class_id         String?                  @db.Uuid
-  masterclass_masterclass masterclass_masterclass? @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_review_master_class_id_5d7b6e38_fk_mastercla")
+  id              String  @id @db.Uuid
+  name            String  @unique @db.VarChar(100)
+  text            String
+  image           String  @db.VarChar(100)
+  master_class_id String? @db.Uuid
+  mclass          mclass? @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_review_master_class_id_5d7b6e38_fk_mastercla")
 
   @@index([master_class_id], map: "review_review_master_class_id_5d7b6e38")
   @@index([name], map: "review_review_name_fe7f7c81_like")
@@ -349,65 +263,141 @@ model sitetree_treeitem_access_permissions {
   @@index([treeitem_id], map: "sitetree_treeitem_access_permissions_treeitem_id_aedb7367")
 }
 
-model sponsor_adcombinator {
-  id                      String                   @id @db.Uuid
-  is_main                 Boolean
-  master_class_id         String?                  @db.Uuid
-  sponsor_id              String?                  @db.Uuid
-  sponsor_type_id         String?                  @db.Uuid
-  masterclass_masterclass masterclass_masterclass? @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_master_class_id_2878a0ad_fk_mastercla")
-  sponsor_sponsor         sponsor_sponsor?         @relation(fields: [sponsor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_sponsor_id_fbf5952f_fk_sponsor_sponsor_id")
-  sponsor_sponsortype     sponsor_sponsortype?     @relation(fields: [sponsor_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_sponsor_type_id_6b996e67_fk_sponsor_s")
+model videorelease_videorelease {
+  id              String   @id @db.Uuid
+  title           String   @db.VarChar(255)
+  slug            String   @unique @db.VarChar(255)
+  description     String
+  date_created    DateTime @db.Date
+  link            String   @db.VarChar(255)
+  master_class_id String   @db.Uuid
+  mclass          mclass   @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "videorelease_videore_master_class_id_7d98d042_fk_mastercla")
+
+  @@index([master_class_id], map: "videorelease_videorelease_master_class_id_7d98d042")
+  @@index([slug], map: "videorelease_videorelease_slug_ff768872_like")
+}
+
+model ad_combinator {
+  id              String        @id(map: "sponsor_adcombinator_pkey") @db.Uuid
+  is_main         Boolean
+  master_class_id String?       @db.Uuid
+  sponsor_id      String?       @db.Uuid
+  sponsor_type_id String?       @db.Uuid
+  mclass          mclass?       @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_master_class_id_2878a0ad_fk_mastercla")
+  sponsor         sponsor?      @relation(fields: [sponsor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_sponsor_id_fbf5952f_fk_sponsor_sponsor_id")
+  sponsor_type    sponsor_type? @relation(fields: [sponsor_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_sponsor_type_id_6b996e67_fk_sponsor_s")
 
   @@index([master_class_id], map: "sponsor_adcombinator_master_class_id_2878a0ad")
   @@index([sponsor_id], map: "sponsor_adcombinator_sponsor_id_fbf5952f")
   @@index([sponsor_type_id], map: "sponsor_adcombinator_sponsor_type_id_6b996e67")
 }
 
-model sponsor_singlead {
-  id                      String                    @id @db.Uuid
-  name                    String                    @db.VarChar(255)
-  image                   String                    @db.VarChar(100)
-  link                    String                    @db.VarChar(255)
-  sponsor_id              String                    @db.Uuid
-  sponsor_sponsor         sponsor_sponsor           @relation(fields: [sponsor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_singlead_sponsor_id_7b92ddf1_fk_sponsor_sponsor_id")
-  masterclass_masterclass masterclass_masterclass[]
+model ad_single {
+  id         String   @id(map: "sponsor_singlead_pkey") @db.Uuid
+  name       String   @db.VarChar(255)
+  image      String   @db.VarChar(100)
+  link       String   @db.VarChar(255)
+  sponsor_id String   @db.Uuid
+  sponsor    sponsor  @relation(fields: [sponsor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_singlead_sponsor_id_7b92ddf1_fk_sponsor_sponsor_id")
+  mclass     mclass[]
 
   @@index([sponsor_id], map: "sponsor_singlead_sponsor_id_7b92ddf1")
 }
 
-model sponsor_sponsor {
-  id                   String                 @id @db.Uuid
-  name                 String                 @db.VarChar(255)
-  logo                 String                 @db.VarChar(100)
-  link                 String                 @db.VarChar(255)
-  color                String                 @db.VarChar(18)
-  sponsor_adcombinator sponsor_adcombinator[]
-  sponsor_singlead     sponsor_singlead[]
+model expert {
+  id              String          @id(map: "expert_expert_pkey") @db.Uuid
+  first_name      String          @db.VarChar(100)
+  last_name       String          @db.VarChar(100)
+  slug            String          @unique(map: "expert_expert_slug_key") @db.VarChar(255)
+  main_photo      String          @db.VarChar(100)
+  bio             String
+  career          String
+  personal_life   String
+  statistic       String
+  achievements    String
+  last_content    String
+  category_id     String          @db.Uuid
+  expert_category expert_category @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expert_category_id_ff3c1800_fk_expert_expertcategory_id")
+  expert_image    expert_image[]
+  mclass          mclass[]
+
+  @@index([category_id], map: "expert_expert_category_id_ff3c1800")
+  @@index([slug], map: "expert_expert_slug_1c4843b2_like")
 }
 
-model sponsor_sponsortype {
-  id                   String                 @id @db.Uuid
-  name                 String                 @db.VarChar(255)
-  sponsor_adcombinator sponsor_adcombinator[]
+model expert_category {
+  id     String   @id(map: "expert_expertcategory_pkey") @db.Uuid
+  title  String   @db.VarChar(255)
+  expert expert[]
 }
 
-model videorelease_videorelease {
-  id                      String                  @id @db.Uuid
-  title                   String                  @db.VarChar(255)
-  slug                    String                  @unique @db.VarChar(255)
-  description             String
-  date_created            DateTime                @db.Date
-  link                    String                  @db.VarChar(255)
-  master_class_id         String                  @db.Uuid
-  masterclass_masterclass masterclass_masterclass @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "videorelease_videore_master_class_id_7d98d042_fk_mastercla")
+model expert_image {
+  id               String  @id(map: "expert_expertimage_pkey") @db.Uuid
+  image            String  @db.VarChar(100)
+  description      String? @db.VarChar(255)
+  is_content_image Boolean
+  expert_id        String  @db.Uuid
+  expert           expert  @relation(fields: [expert_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expertimage_expert_id_03615274_fk_expert_expert_id")
 
-  @@index([master_class_id], map: "videorelease_videorelease_master_class_id_7d98d042")
-  @@index([slug], map: "videorelease_videorelease_slug_ff768872_like")
+  @@index([expert_id], map: "expert_expertimage_expert_id_03615274")
 }
 
-model expert_expertcategory {
-  id            String          @id @db.Uuid
-  title         String          @db.VarChar(255)
-  expert_expert expert_expert[]
+model mclass {
+  id                        String                      @id(map: "masterclass_masterclass_pkey") @db.Uuid
+  title                     String                      @db.VarChar(255)
+  slug                      String                      @unique(map: "masterclass_masterclass_slug_key") @db.VarChar(255)
+  date_created              DateTime                    @db.Date
+  trailer                   String                      @db.VarChar(255)
+  image                     String                      @db.VarChar(100)
+  is_dark_theme             Boolean
+  expert_id                 String                      @db.Uuid
+  single_ad_id              String?                     @db.Uuid
+  related_mc_id             String?                     @db.Uuid
+  expert                    expert                      @relation(fields: [expert_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_masterclass_expert_id_0d4e6fa7_fk_expert_expert_id")
+  mclass                    mclass?                     @relation("mclassTomclass_related_mc_id", fields: [related_mc_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mclass_related_mc_id_bcafffb5_fk_mclass_id")
+  ad_single                 ad_single?                  @relation(fields: [single_ad_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mclass_single_ad_id_22ab87db_fk_sponsor_adsingle_id")
+  ad_combinator             ad_combinator[]
+  other_mclass              mclass[]                    @relation("mclassTomclass_related_mc_id")
+  mclass_targets            mclass_targets[]
+  review_review             review_review[]
+  videorelease_videorelease videorelease_videorelease[]
+
+  @@index([expert_id], map: "masterclass_masterclass_expert_id_0d4e6fa7")
+  @@index([single_ad_id], map: "masterclass_masterclass_single_ad_id_42623233")
+  @@index([slug], map: "masterclass_masterclass_slug_ccc13fcf_like")
+  @@index([related_mc_id], map: "mclass_related_mc_id_bcafffb5")
+}
+
+model mclass_target {
+  id             String           @id(map: "masterclass_masterclasstarget_pkey") @db.Uuid
+  title          String           @db.VarChar(255)
+  mclass_targets mclass_targets[]
+}
+
+model mclass_targets {
+  id                   Int           @id(map: "masterclass_masterclass_targets_pkey") @default(autoincrement())
+  masterclass_id       String        @db.Uuid
+  masterclasstarget_id String        @db.Uuid
+  mclass               mclass        @relation(fields: [masterclass_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_masterclass_id_92f057d0_fk_mastercla")
+  mclass_target        mclass_target @relation(fields: [masterclasstarget_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_masterclasstarget_id_04d02857_fk_mastercla")
+
+  @@unique([masterclass_id, masterclasstarget_id], map: "masterclass_masterclass__masterclass_id_mastercla_d5c5a848_uniq")
+  @@index([masterclass_id], map: "masterclass_masterclass_targets_masterclass_id_92f057d0")
+  @@index([masterclasstarget_id], map: "masterclass_masterclass_targets_masterclasstarget_id_04d02857")
+}
+
+model sponsor {
+  id            String          @id(map: "sponsor_sponsor_pkey") @db.Uuid
+  name          String          @db.VarChar(255)
+  logo          String          @db.VarChar(100)
+  link          String          @db.VarChar(255)
+  color         String          @db.VarChar(18)
+  ad_combinator ad_combinator[]
+  ad_single     ad_single[]
+}
+
+model sponsor_type {
+  id            String          @id(map: "sponsor_sponsortype_pkey") @db.Uuid
+  name          String          @db.VarChar(255)
+  ad_combinator ad_combinator[]
 }

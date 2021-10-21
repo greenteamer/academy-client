@@ -3,27 +3,26 @@ import { FC } from "hoist-non-react-statics/node_modules/@types/react";
 import { MEDIA_URL, STATIC_URL } from "../../constants";
 import { TMasterClass } from "../../services/master-class";
 import { MCSponsors } from "../mc-sponsors";
+import { getExpertFullName } from "../../utils";
 
 export type Props = { mc: NonNullable<TMasterClass> };
 
-export const MasterclassNameComponent: FC<Props> = ({ mc }) => (
+export const MasterClassComponent: FC<Props> = ({ mc }) => (
   <div className="m-t-block-mini">
     <div
-      className="component-masterclassName border-radius-large masterclassNameName-full-size p-md-block-large p-r"
+      className="component-masterclass border-radius-large masterclass-full-size p-md-block-large p-r"
       style={{
         backgroundImage: `url(${MEDIA_URL}${mc.image})`,
       }}
     >
       <div
-        className={`component-masterclassName-content ${
+        className={`component-masterclass-content ${
           mc.is_dark_theme && "dark-theme"
         }`}
       >
-        <h2>
-          {mc.expert_expert.first_name} {mc.expert_expert.last_name}
-        </h2>
+        <h2>{getExpertFullName(mc.expert)}</h2>
         <h2 className="f-w-n">{mc.title}</h2>
-        <div className="btn-grip-masterclassName d-flex">
+        <div className="btn-grip-masterclass d-flex">
           <a className="btn btn-secondary btn-large" href="">
             <i className="icon-play" aria-hidden="true"></i>Трейлер
           </a>
@@ -63,7 +62,7 @@ export const MasterclassNameComponent: FC<Props> = ({ mc }) => (
           </a>
         </div>
       </div>
-      <MCSponsors sponsors={mc.sponsor_adcombinator} />
+      <MCSponsors sponsors={mc.ad_combinator} />
     </div>
   </div>
 );

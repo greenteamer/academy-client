@@ -1,1 +1,1 @@
-export { MasterclassNameComponent } from "./master-class-component";
+export { MasterClassComponent } from "./master-class-component";

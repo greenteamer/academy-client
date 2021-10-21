@@ -1,17 +1,32 @@
+import { Prisma } from ".prisma/client";
+
+// export const MasterClassQuery: Prisma.mclassArgs = {
 export const MasterClassQuery = {
   include: {
-    expert_expert: {
+    expert: {
       include: {
-        expert_expertcategory: true,
+        expert_category: true,
       },
     },
-    masterclass_masterclass_targets: {
-      include: { masterclass_masterclasstarget: true },
+    mclass_targets: {
+      include: { mclass_target: true },
     },
-    sponsor_adcombinator: {
+    ad_combinator: {
       include: {
-        sponsor_sponsor: true,
-        sponsor_sponsortype: true,
+        sponsor: true,
+        sponsor_type: true,
+      },
+    },
+  },
+};
+
+// export const MCWithRelatedMCQuery: Prisma.mclassArgs = {
+export const MCWithRelatedMCQuery = {
+  include: {
+    ...MasterClassQuery.include,
+    other_mclass: {
+      include: {
+        ...MasterClassQuery.include,
       },
     },
   },

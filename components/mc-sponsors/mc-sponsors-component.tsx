@@ -5,8 +5,8 @@ import { MCSponsorsProps, MCSponsorItemProps } from "./types";
 export const MCSponsors = ({ sponsors }: MCSponsorsProps) => {
   const main = sponsors.find((i) => i.is_main);
   const rest = sponsors.filter((i) => !i.is_main);
-  if (!main?.sponsor_sponsor || !main.sponsor_sponsortype) return null;
-  const backgroundColor = main.sponsor_sponsor.color;
+  if (!main?.sponsor || !main.sponsor_type) return null;
+  const backgroundColor = main.sponsor.color;
   return (
     <div
       className="sponsor-block"
@@ -18,8 +18,8 @@ export const MCSponsors = ({ sponsors }: MCSponsorsProps) => {
         {rest.map((s, idx) => (
           <SponsorItem
             key={`${idx}-${s.id}`}
-            sponsor={s.sponsor_sponsor}
-            sponsorType={s.sponsor_sponsortype}
+            sponsor={s.sponsor}
+            sponsorType={s.sponsor_type}
           />
         ))}
       </div>

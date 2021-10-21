@@ -11,8 +11,8 @@ export const Trailer: FC<Props> = ({ link }) => (
           src={link}
           width="100%"
           height="600"
-          frameborder="0"
           allow="autoplay; fullscreen"
+          frameborder="0"
           allowfullscreen
         ></iframe>
         <span className="btn plashka-video open-video d-flex align-items-center color-gray">

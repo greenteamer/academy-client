@@ -1,14 +1,18 @@
-import { PrismaClient } from ".prisma/client";
-import { MasterClassQuery } from "./queries";
+import { Prisma, PrismaClient } from ".prisma/client";
+import { MasterClassQuery, MCWithRelatedMCQuery } from "./queries";
 const prisma = new PrismaClient();
 
 export const getAllMasterClasses = async () =>
-  prisma.masterclass_masterclass.findMany<typeof MasterClassQuery>(
-    MasterClassQuery
-  );
+  prisma.mclass.findMany(MasterClassQuery);
 
-export const findFirstMasterClass = async (expert_id: string) =>
-  prisma.masterclass_masterclass.findFirst({
-    where: { expert_id },
+export const getMasterClass = async (where: Prisma.mclassWhereInput) =>
+  prisma.mclass.findFirst({
+    where,
     include: MasterClassQuery.include,
+  });
+
+export const getMCWithRelatedMC = async (where: Prisma.mclassWhereInput) =>
+  prisma.mclass.findFirst({
+    where,
+    include: MCWithRelatedMCQuery.include,
   });

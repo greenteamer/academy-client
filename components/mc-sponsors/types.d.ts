@@ -1,9 +1,9 @@
 import { TMasterClass } from "../../services/master-class";
 
-type Combinators = NonNullable<TMasterClass>["sponsor_adcombinator"];
+type Combinators = NonNullable<TMasterClass>["ad_combinator"];
 
-type Sponsor = Combinators[number]["sponsor_sponsor"];
-type SponsorType = Combinators[number]["sponsor_sponsortype"];
+type Sponsor = Combinators[number]["sponsor"];
+type SponsorType = Combinators[number]["sponsor_type"];
 
 export type MCSponsorsProps = {
   sponsors: Combinators;

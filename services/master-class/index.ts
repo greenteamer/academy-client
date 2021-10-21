@@ -1,2 +1,2 @@
 export * from "./helpers";
-export type { TMasterClass, TMasterClasseses } from "./types";
+export type { TMasterClass, TMasterClasses } from "./types";
