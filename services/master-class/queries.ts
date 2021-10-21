@@ -8,6 +8,9 @@ export const MasterClassQuery = {
         expert_category: true,
       },
     },
+    // mclass_targets: {
+    //   include: { mclass_target: true },
+    // },
     mclass_targets: {
       include: { mclass_target: true },
     },
@@ -24,10 +27,12 @@ export const MasterClassQuery = {
 export const MCWithRelatedMCQuery = {
   include: {
     ...MasterClassQuery.include,
+    videorelease_videorelease: true,
     other_mclass: {
       include: {
         ...MasterClassQuery.include,
       },
     },
+    ad_single: true,
   },
 };

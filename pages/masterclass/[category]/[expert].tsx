@@ -92,10 +92,10 @@ const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
       <div className="container m-t-block-mini masterclass-page-bio">
         <div className="row bg-gray block-content overflow-hidden box-shadow border-radius-large color-gray">
           <div className="col-md-2 ps-md-0 pe-md-0">
-            {/* <img
+            <img
               className="img-fluid b-r-50"
               src={`${MEDIA_URL}${masterClass.expert.main_photo}`}
-            /> */}
+            />
           </div>
           <div className="col-md-10">
             <div className="master-class-body m-t-block-mid m-md-t-block-mid">
@@ -112,86 +112,124 @@ const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
       {masterClass.single_ad_id && (
         <div className="container m-t-block-mini banner-sponsor">
           <div className="d-flex justify-content-center">
-            {/* <img
+            <img
               className="img-fluid text-center"
-              src="/media/{{ master_class.single_ad.image }}"
-            /> */}
+              src={`${MEDIA_URL}${masterClass.ad_single &&
+                masterClass.ad_single.image}`}
+            />
           </div>
         </div>
       )}
-      {/* <div className="container m-t-block-mini video-list">
-    <div className="row bg-gray box-shadow border-radius-large color-gray">
-      <div className="col-md-12">
-        <div className=" block-content">
-          <div className="info-videoreleases color-gray">
-            <h2>Кому подойдёт этот мастер-класс?</h2>
-            <div className="d-flex flex-wrap targets-videoreleases-items">
-              {% for target in master_class.targets.all %}
-              <div className="d-flex align-items-center col-auto"><span>{{ target.title }}</span><i className="icon-circle color-red" aria-hidden="true"></i></div>
-              {% endfor %}
+      <div className="container m-t-block-mini video-list">
+        <div className="row bg-gray box-shadow border-radius-large color-gray">
+          <div className="col-md-12">
+            <div className=" block-content">
+              <div className="info-videoreleases color-gray">
+                <h2>Кому подойдёт этот мастер-класс?</h2>
+                <div className="d-flex flex-wrap targets-videoreleases-items">
+                  {masterClass.mclass_targets.map((target) => (
+                    <div
+                      key={`${target.id}`}
+                      className="d-flex align-items-center col-auto"
+                    >
+                      <span>{target.mclass_target.title}</span>
+                      <i className="icon-circle color-red" aria-hidden="true" />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div> */}
       <Trailer link={masterClass.trailer} />
-      {/* <div id="video-list" className="container m-t-block-mini video-list">
-    <div className="row bg-gray box-shadow border-radius-large color-gray">
-      <div className="col-md-12">
-        <div className="block-content">
-          <div className="row-cols-md-3 justify-content-md-between d-md-flex video-list-header">
-            <div className="info-videoreleases color-gray">
-              <h2>Программа</h2>
-              <div className="d-flex flex-wrap targets-videoreleases-items">
-                <div className="d-flex align-items-center col-auto"><span>10 выпусков</span><i className="icon-circle color-red" aria-hidden="true"></i></div>
-                <div className="d-flex align-items-center col-auto"><span>1 час 45 минут</span><i className="icon-circle color-red" aria-hidden="true"></i></div>
-              </div>
-            </div>
-            <div className="btn-grip-video">
-              <div>
-                <div>
-                  <a className="btn btn-primary" href="#"><span>799₽</span> Купить</a>
-                </div>
-                <div className="bonus-block d-flex align-items-center">
-                  <div className="d-flex bonus-bt btn btn-secondary align-items-center color-white">
-                    <div className="bonus-tetle">
-                      <span>+100 бонусов</span>
+      <div id="video-list" className="container m-t-block-mini video-list">
+        <div className="row bg-gray box-shadow border-radius-large color-gray">
+          <div className="col-md-12">
+            <div className="block-content">
+              <div className="row-cols-md-3 justify-content-md-between d-md-flex video-list-header">
+                <div className="info-videoreleases color-gray">
+                  <h2>Программа</h2>
+                  <div className="d-flex flex-wrap targets-videoreleases-items">
+                    <div className="d-flex align-items-center col-auto">
+                      <span>10 выпусков</span>
+                      <i className="icon-circle color-red" aria-hidden="true" />
                     </div>
-                    <div className="bonus-img">
-                      <img src="{% static '/main/img/bonus-logo.png' %}" alt="">
+                    <div className="d-flex align-items-center col-auto">
+                      <span>1 час 45 минут</span>
+                      <i className="icon-circle color-red" aria-hidden="true" />
                     </div>
                   </div>
-                  <a href="#" data-toggle="tooltip" data-bs-placement="right" title="О менталитете чемпиона, формировании бренда и цифровых технологиях!">
-                    <i className="icon-question color-gray" aria-hidden="true"></i>
-                  </a>
                 </div>
+                <div className="btn-grip-video">
+                  <div>
+                    <div>
+                      <a className="btn btn-primary" href="#">
+                        <span>799₽</span> Купить
+                      </a>
+                    </div>
+                    <div className="bonus-block d-flex align-items-center">
+                      <div className="d-flex bonus-bt btn btn-secondary align-items-center color-white">
+                        <div className="bonus-tetle">
+                          <span>+100 бонусов</span>
+                        </div>
+                        <div className="bonus-img">
+                          <img
+                            src={`${STATIC_URL}/main/img/bonus-logo.png`}
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <a
+                        href="#"
+                        data-toggle="tooltip"
+                        data-bs-placement="right"
+                        title="О менталитете чемпиона, формировании бренда и цифровых технологиях!"
+                      >
+                        <i
+                          className="icon-question color-gray"
+                          aria-hidden="true"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span className="line" />
+              <div className="video-list-body m-md-t-block-mid">
+                {masterClass.videorelease_videorelease.map((v) => (
+                  <div
+                    key={`vr-${v.id}`}
+                    className="video-list-item row align-items-center border-radius-lite m-md-t-block-mid m-md-b-block-mid"
+                  >
+                    <div className="col-md-3 video-list-video p-md-0">
+                      <iframe
+                        className="border-radius-large"
+                        src={v.link}
+                        width="100%"
+                        frameborder="0"
+                        allow="autoplay; fullscreen"
+                        allowfullscreen
+                      />
+                    </div>
+                    <div className="col-md-9 video-list-des">
+                      <h3>{v.title}</h3>
+                      <div className="color-gray">
+                        <span>{v.description}</span>
+                      </div>
+                      <div className="video-list-btn btn btn-secondary close-video  d-md-inline-flex align-items-center">
+                        <a className="color-gray" href="">
+                          Доступно после покупки
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-          <span className="line"></span>
-          <div className="video-list-body m-md-t-block-mid">
-          {% for vr in video_releases %}
-            <div className="video-list-item row align-items-center border-radius-lite m-md-t-block-mid m-md-b-block-mid">
-              <div className="col-md-3 video-list-video p-md-0">
-                <iframe className="border-radius-large" src="{{ master_class.trailer }}" width="100%" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-              </div>
-              <div className="col-md-9 video-list-des">
-                <h3>{{ vr.title }}</h3>
-                <div className="color-gray">
-                  <span>{{ vr.description }}</span>
-                </div>
-                <div className="video-list-btn btn btn-secondary close-video  d-md-inline-flex align-items-center">
-                  <a className="color-gray" href="">Доступно после покупки</a>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
           </div>
         </div>
       </div>
-    </div>
-  </div> */}
       {/* <div className="container m-t-section m-md-t-section m-b-section m-md-b-section">
     <div className="row">
       <div className="col-md-12 p-md-0">
