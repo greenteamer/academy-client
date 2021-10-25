@@ -1,9 +1,5 @@
 import { expert } from ".prisma/client";
-import { CLIENT_URL, SERVER_URL } from "../constants";
-
-export const get404 = (condition: boolean) => ({
-  notFound: true,
-});
+import { CLIENT_URL } from "../constants";
 
 type TGetFullName = Pick<expert, "first_name" | "last_name">;
 
@@ -19,6 +15,10 @@ type TUrlByModel =
   | {
       modelName: "expert";
       expertSlug: string;
+    }
+  | {
+      modelName: "news";
+      newsSlug: string;
     };
 
 export const getModelUrl = (props: TUrlByModel): string => {
@@ -29,5 +29,7 @@ export const getModelUrl = (props: TUrlByModel): string => {
     case "mclass":
       const { categorySlug, expertSlug } = props;
       return `${CLIENT_URL}/masterclass/${categorySlug}/${expertSlug}`;
+    case "news":
+      return `${CLIENT_URL}/novosti/${props.newsSlug}`;
   }
 };

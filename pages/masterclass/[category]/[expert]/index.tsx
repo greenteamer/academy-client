@@ -21,7 +21,6 @@ type Props = {
 const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
   const router = useRouter();
   const { category } = router.query;
-  console.log({ masterClass });
   if (!masterClass) return null;
   return (
     <>
@@ -197,7 +196,7 @@ const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
               </div>
               <span className="line" />
               <div className="video-list-body m-md-t-block-mid">
-                {masterClass.videorelease_videorelease.map((v) => (
+                {masterClass.videorelease.map((v) => (
                   <div
                     key={`vr-${v.id}`}
                     className="video-list-item row align-items-center border-radius-lite m-md-t-block-mid m-md-b-block-mid"
@@ -270,13 +269,11 @@ export const getStaticPaths: GetStaticPaths<
     const paths = experts.map((e) => ({
       params: { category: e.expert_category.title, expert: e.slug },
     }));
-    console.log(">> paths: ", paths);
     return {
       paths,
       fallback: true,
     };
   } catch (e) {
-    console.log(">> path error: ", e);
     return {
       paths: [],
       fallback: true,
@@ -288,7 +285,6 @@ export const getStaticProps: GetStaticProps<
   Props,
   MasterClassRoteParams
 > = async ({ params }) => {
-  console.log(params);
   if (!params) return { notFound: true };
   const prisma = new PrismaClient();
   const expert = await prisma.expert.findUnique({
@@ -297,7 +293,6 @@ export const getStaticProps: GetStaticProps<
   });
   if (!expert) return { notFound: true };
   const masterClass = await getMCWithRelatedMC({ expert_id: expert.id });
-  console.log(masterClass);
   if (!masterClass) return { notFound: true };
   return {
     props: {

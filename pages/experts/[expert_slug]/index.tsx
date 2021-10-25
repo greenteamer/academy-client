@@ -27,7 +27,6 @@ type Props = {
 
 const ExpertPage: NextPage<Props> = ({ masterClass, expert }) => {
   const router = useRouter();
-  console.log({ expert, masterClass });
   if (!expert || !masterClass) return null;
   const contentImage = expert.expert_image.find((i) => i.is_content_image);
   return (
@@ -292,7 +291,7 @@ export const getStaticPaths: GetStaticPaths<ExpertRoteParams> = async () => {
       fallback: true,
     };
   } catch (e) {
-    console.log(">> path error: ", e);
+    // console.log(">> path error: ", e);
     return {
       paths: [],
       fallback: true,
@@ -303,19 +302,12 @@ export const getStaticPaths: GetStaticPaths<ExpertRoteParams> = async () => {
 export const getStaticProps: GetStaticProps<Props, ExpertRoteParams> = async ({
   params,
 }) => {
-  console.log(params);
   if (!params) return { notFound: true };
-  const prisma = new PrismaClient();
-  // const expert = await prisma.expert.findUnique({
-  //   where: { slug: params.expert_slug },
-  // });
   const expert = await getExpert({
     slug: params.expert_slug,
   });
   if (!expert) return { notFound: true };
   const masterClass = await getMasterClass({ expert_id: expert.id });
-  // const masterClass = await expert({ expert_id: expert.id });
-  console.log(masterClass);
   if (!masterClass) return { notFound: true };
   return {
     props: {

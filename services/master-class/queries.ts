@@ -24,7 +24,7 @@ export const MasterClassQuery = {
 export const MCWithRelatedMCQuery = {
   include: {
     ...MasterClassQuery.include,
-    videorelease_videorelease: true,
+    videorelease: true,
     other_mclass: {
       include: {
         ...MasterClassQuery.include,

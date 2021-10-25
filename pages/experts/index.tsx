@@ -10,7 +10,6 @@ type Props = {
 
 const ExpertsPage: NextPage<Props> = ({ experts }) => {
   if (!experts) return null;
-  console.log(experts);
   return (
     <>
       <div className="header-title m-md-t-block-lerge m-t-block-large">

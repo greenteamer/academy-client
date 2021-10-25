@@ -8,7 +8,7 @@ export const Header = () => {
           <div className="col-md-3 col-6">
             <Link href="/">
               <a className="logo-header">
-                <img src="img/logo.svg" alt="" />
+                <img src="/img/logo.svg" alt="" />
               </a>
             </Link>
           </div>
