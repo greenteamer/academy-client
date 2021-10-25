@@ -97,7 +97,6 @@ export const getStaticPaths: GetStaticPaths<NewsParams> = async () => {
     const paths = news.map((n) => ({
       params: {
         news_slug: n.slug,
-        masterclass: n.slug,
       },
     }));
     return {

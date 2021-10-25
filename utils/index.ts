@@ -19,6 +19,10 @@ type TUrlByModel =
   | {
       modelName: "news";
       newsSlug: string;
+    }
+  | {
+      modelName: "article";
+      articleSlug: string;
     };
 
 export const getModelUrl = (props: TUrlByModel): string => {
@@ -31,5 +35,7 @@ export const getModelUrl = (props: TUrlByModel): string => {
       return `${CLIENT_URL}/masterclass/${categorySlug}/${expertSlug}`;
     case "news":
       return `${CLIENT_URL}/novosti/${props.newsSlug}`;
+    case "article":
+      return `${CLIENT_URL}/stati/${props.articleSlug}`;
   }
 };
