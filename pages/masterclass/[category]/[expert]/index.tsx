@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { PrismaClient } from "@prisma/client";
-import { MEDIA_URL, STATIC_URL } from "../../../constants";
-import { getMCWithRelatedMC } from "../../../services/master-class/helpers";
-import { TMCWithRelatedMC } from "../../../services/master-class/types";
-import { MCSponsors } from "../../../components/mc-sponsors";
-import { Trailer } from "../../../components/trailer";
-import { getExpertFullName } from "../../../utils";
-import { MasterClassComponent } from "../../../components/master-class";
+import { MEDIA_URL, STATIC_URL } from "../../../../constants";
+import { getMCWithRelatedMC } from "../../../../services/master-class/helpers";
+import { TMCWithRelatedMC } from "../../../../services/master-class/types";
+import { MCSponsors } from "../../../../components/mc-sponsors";
+import { Trailer } from "../../../../components/trailer";
+import { getFullName } from "../../../../utils";
+import { MasterClassComponent } from "../../../../components/master-class";
 
 type MasterClassRoteParams = {
   category: string;
@@ -35,7 +35,7 @@ const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
               <div className="d-flex flex-flow-column flex-wrap">
                 <div className="banner-title component-masterclass-title">
                   <h1>
-                    {getExpertFullName(masterClass.expert)}
+                    {getFullName(masterClass.expert)}
                     <span className="f-w-n d-flex">{masterClass.title}</span>
                   </h1>
                 </div>
@@ -99,7 +99,7 @@ const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
           </div>
           <div className="col-md-10">
             <div className="master-class-body m-t-block-mid m-md-t-block-mid">
-              <h2>{getExpertFullName(masterClass.expert)}</h2>
+              <h2>{getFullName(masterClass.expert)}</h2>
               <div
                 dangerouslySetInnerHTML={{
                   __html: masterClass.expert.bio,
@@ -207,9 +207,9 @@ const MasterClassPage: NextPage<Props> = ({ masterClass }) => {
                         className="border-radius-large"
                         src={v.link}
                         width="100%"
-                        frameborder="0"
+                        frameBorder="0"
                         allow="autoplay; fullscreen"
-                        allowfullscreen
+                        allowFullScreen
                       />
                     </div>
                     <div className="col-md-9 video-list-des">
@@ -288,6 +288,7 @@ export const getStaticProps: GetStaticProps<
   Props,
   MasterClassRoteParams
 > = async ({ params }) => {
+  console.log(params);
   if (!params) return { notFound: true };
   const prisma = new PrismaClient();
   const expert = await prisma.expert.findUnique({

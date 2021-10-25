@@ -328,7 +328,10 @@ model expert {
 model expert_category {
   id     String   @id(map: "expert_expertcategory_pkey") @db.Uuid
   title  String   @db.VarChar(255)
+  slug   String   @unique(map: "expert_category_slug_05c4555c_uniq") @db.VarChar(255)
   expert expert[]
+
+  @@index([slug], map: "expert_category_slug_05c4555c_like")
 }
 
 model expert_image {

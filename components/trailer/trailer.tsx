@@ -12,11 +12,12 @@ export const Trailer: FC<Props> = ({ link }) => (
           width="100%"
           height="600"
           allow="autoplay; fullscreen"
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
+          frameBorder="0"
+          allowFullScreen
+        />
         <span className="btn plashka-video open-video d-flex align-items-center color-gray">
-          <i className="icon-play" aria-hidden="true"></i>Смотреть трейлер
+          <i className="icon-play" aria-hidden="true" />
+          Смотреть трейлер
         </span>
       </div>
     </div>

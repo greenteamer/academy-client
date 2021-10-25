@@ -8,9 +8,6 @@ export const MasterClassQuery = {
         expert_category: true,
       },
     },
-    // mclass_targets: {
-    //   include: { mclass_target: true },
-    // },
     mclass_targets: {
       include: { mclass_target: true },
     },

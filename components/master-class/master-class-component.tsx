@@ -3,7 +3,7 @@ import { FC } from "hoist-non-react-statics/node_modules/@types/react";
 import { MEDIA_URL, STATIC_URL } from "../../constants";
 import { TMasterClass } from "../../services/master-class";
 import { MCSponsors } from "../mc-sponsors";
-import { getExpertFullName } from "../../utils";
+import { getFullName, getModelUrl } from "../../utils";
 
 export type Props = { mc: NonNullable<TMasterClass> };
 
@@ -16,19 +16,23 @@ export const MasterClassComponent: FC<Props> = ({ mc }) => (
       }}
     >
       <div
-        className={`component-masterclass-content ${
-          mc.is_dark_theme && "dark-theme"
-        }`}
+        className={`component-masterclass-content ${mc.is_dark_theme &&
+          "dark-theme"}`}
       >
-        <h2>{getExpertFullName(mc.expert)}</h2>
+        <h2>{getFullName(mc.expert)}</h2>
         <h2 className="f-w-n">{mc.title}</h2>
         <div className="btn-grip-masterclass d-flex">
           <a className="btn btn-secondary btn-large" href="">
-            <i className="icon-play" aria-hidden="true"></i>Трейлер
+            <i className="icon-play" aria-hidden="true" />
+            Трейлер
           </a>
           <a
             className="btn btn-secondary btn-large"
-            href="{{ mc.get_absolute_url }}"
+            href={getModelUrl({
+              modelName: "mclass",
+              categorySlug: mc.expert.expert_category.slug,
+              expertSlug: mc.expert.slug,
+            })}
           >
             Подробнее
           </a>
@@ -58,7 +62,7 @@ export const MasterClassComponent: FC<Props> = ({ mc }) => (
             data-bs-placement="right"
             title="О менталитете чемпиона, формировании бренда и цифровых технологиях!"
           >
-            <i className="icon-question" aria-hidden="true"></i>
+            <i className="icon-question" aria-hidden="true" />
           </a>
         </div>
       </div>
