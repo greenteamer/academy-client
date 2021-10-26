@@ -50,7 +50,7 @@ export const MasterClassComponent: FC<Props> = ({ mc }) => (
             <div className="bonus-img">
               <Image
                 alt="some alt"
-                src={`${STATIC_URL}/main/img/bonus-logo.png`}
+                src={`${STATIC_URL}main/img/bonus-logo.png`}
                 width={36}
                 height={20}
               />
