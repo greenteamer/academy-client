@@ -21,18 +21,14 @@ import "../styles/ported/video.css";
 import type { AppProps } from "next/app";
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
-import client from "../lib/apollo-client";
-import { ApolloProvider } from "@apollo/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={client}>
-      <>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-      </>
-    </ApolloProvider>
+    <>
+      <Header />
+      <Component {...pageProps} />
+      <Footer />
+    </>
   );
 }
 export default MyApp;

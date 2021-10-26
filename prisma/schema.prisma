@@ -1,0 +1,406 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model auth_group {
+  id                               Int                                @id @default(autoincrement())
+  name                             String                             @unique @db.VarChar(150)
+  auth_group_permissions           auth_group_permissions[]
+  authentication_customuser_groups authentication_customuser_groups[]
+
+  @@index([name], map: "auth_group_name_a6ea08ec_like")
+}
+
+model auth_group_permissions {
+  id              Int             @id @default(autoincrement())
+  group_id        Int
+  permission_id   Int
+  auth_group      auth_group      @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id")
+  auth_permission auth_permission @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm")
+
+  @@unique([group_id, permission_id], map: "auth_group_permissions_group_id_permission_id_0cd325b0_uniq")
+  @@index([group_id], map: "auth_group_permissions_group_id_b120cbf9")
+  @@index([permission_id], map: "auth_group_permissions_permission_id_84c5c92e")
+}
+
+model auth_permission {
+  id                                         Int                                          @id @default(autoincrement())
+  name                                       String                                       @db.VarChar(255)
+  content_type_id                            Int
+  codename                                   String                                       @db.VarChar(100)
+  django_content_type                        django_content_type                          @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_permission_content_type_id_2f476e4b_fk_django_co")
+  auth_group_permissions                     auth_group_permissions[]
+  authentication_customuser_user_permissions authentication_customuser_user_permissions[]
+  sitetree_treeitem_access_permissions       sitetree_treeitem_access_permissions[]
+
+  @@unique([content_type_id, codename], map: "auth_permission_content_type_id_codename_01ab375a_uniq")
+  @@index([content_type_id], map: "auth_permission_content_type_id_2f476e4b")
+}
+
+model authentication_customuser {
+  password                                   String                                       @db.VarChar(128)
+  last_login                                 DateTime?                                    @db.Timestamptz(6)
+  is_superuser                               Boolean
+  is_staff                                   Boolean
+  is_active                                  Boolean
+  date_joined                                DateTime                                     @db.Timestamptz(6)
+  id                                         String                                       @id @db.Uuid
+  first_name                                 String?                                      @db.VarChar(255)
+  last_name                                  String?                                      @db.VarChar(255)
+  email                                      String                                       @unique @db.VarChar(255)
+  phone                                      String?                                      @unique @db.VarChar(255)
+  authentication_customuser_groups           authentication_customuser_groups[]
+  authentication_customuser_user_permissions authentication_customuser_user_permissions[]
+  django_admin_log                           django_admin_log[]
+
+  @@index([email], map: "authentication_customuser_email_a127f886_like")
+  @@index([phone], map: "authentication_customuser_phone_22c9a50c_like")
+}
+
+model authentication_customuser_groups {
+  id                        Int                       @id @default(autoincrement())
+  customuser_id             String                    @db.Uuid
+  group_id                  Int
+  authentication_customuser authentication_customuser @relation(fields: [customuser_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "authentication_custo_customuser_id_a7d1343c_fk_authentic")
+  auth_group                auth_group                @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "authentication_custo_group_id_c5ef1d10_fk_auth_grou")
+
+  @@unique([customuser_id, group_id], map: "authentication_customuse_customuser_id_group_id_8a637646_uniq")
+  @@index([customuser_id], map: "authentication_customuser_groups_customuser_id_a7d1343c")
+  @@index([group_id], map: "authentication_customuser_groups_group_id_c5ef1d10")
+}
+
+model authentication_customuser_user_permissions {
+  id                        Int                       @id @default(autoincrement())
+  customuser_id             String                    @db.Uuid
+  permission_id             Int
+  authentication_customuser authentication_customuser @relation(fields: [customuser_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "authentication_custo_customuser_id_33d2a5f7_fk_authentic")
+  auth_permission           auth_permission           @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "authentication_custo_permission_id_e47332af_fk_auth_perm")
+
+  @@unique([customuser_id, permission_id], map: "authentication_customuse_customuser_id_permission_923704b1_uniq")
+  @@index([customuser_id], map: "authentication_customuser__customuser_id_33d2a5f7")
+  @@index([permission_id], map: "authentication_customuser__permission_id_e47332af")
+}
+
+model authentication_phonemodel {
+  id         String  @id @db.Uuid
+  phone      String  @db.VarChar(16)
+  isVerified Boolean
+  counter    Int
+}
+
+model django_admin_log {
+  id                        Int                       @id @default(autoincrement())
+  action_time               DateTime                  @db.Timestamptz(6)
+  object_id                 String?
+  object_repr               String                    @db.VarChar(200)
+  action_flag               Int                       @db.SmallInt
+  change_message            String
+  content_type_id           Int?
+  user_id                   String                    @db.Uuid
+  django_content_type       django_content_type?      @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "django_admin_log_content_type_id_c4bce8eb_fk_django_co")
+  authentication_customuser authentication_customuser @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "django_admin_log_user_id_c564eba6_fk_authentic")
+
+  @@index([content_type_id], map: "django_admin_log_content_type_id_c4bce8eb")
+  @@index([user_id], map: "django_admin_log_user_id_c564eba6")
+}
+
+model django_content_type {
+  id               Int                @id @default(autoincrement())
+  app_label        String             @db.VarChar(100)
+  model            String             @db.VarChar(100)
+  auth_permission  auth_permission[]
+  django_admin_log django_admin_log[]
+
+  @@unique([app_label, model], map: "django_content_type_app_label_model_76bd3d3b_uniq")
+}
+
+model django_migrations {
+  id      Int      @id @default(autoincrement())
+  app     String   @db.VarChar(255)
+  name    String   @db.VarChar(255)
+  applied DateTime @db.Timestamptz(6)
+}
+
+model django_session {
+  session_key  String   @id @db.VarChar(40)
+  session_data String
+  expire_date  DateTime @db.Timestamptz(6)
+
+  @@index([expire_date], map: "django_session_expire_date_a5c62663")
+  @@index([session_key], map: "django_session_session_key_c0390e0f_like")
+}
+
+model review_review {
+  id              String  @id @db.Uuid
+  name            String  @unique @db.VarChar(100)
+  text            String
+  image           String  @db.VarChar(100)
+  master_class_id String? @db.Uuid
+  mclass          mclass? @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_review_master_class_id_5d7b6e38_fk_mastercla")
+
+  @@index([master_class_id], map: "review_review_master_class_id_5d7b6e38")
+  @@index([name], map: "review_review_name_fe7f7c81_like")
+}
+
+model sitetree_tree {
+  id                Int                 @id @default(autoincrement())
+  title             String              @db.VarChar(100)
+  alias             String              @unique @db.VarChar(80)
+  sitetree_treeitem sitetree_treeitem[]
+
+  @@index([alias], map: "sitetree_tree_alias_c897c375_like")
+}
+
+model sitetree_treeitem {
+  id                                   Int                                    @id @default(autoincrement())
+  title                                String                                 @db.VarChar(100)
+  hint                                 String                                 @db.VarChar(200)
+  url                                  String                                 @db.VarChar(200)
+  urlaspattern                         Boolean
+  hidden                               Boolean
+  alias                                String?                                @db.VarChar(80)
+  description                          String
+  inmenu                               Boolean
+  inbreadcrumbs                        Boolean
+  insitetree                           Boolean
+  access_loggedin                      Boolean
+  access_guest                         Boolean
+  access_restricted                    Boolean
+  access_perm_type                     Int
+  sort_order                           Int
+  parent_id                            Int?
+  tree_id                              Int
+  sitetree_treeitem                    sitetree_treeitem?                     @relation("sitetree_treeitemTositetree_treeitem_parent_id", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sitetree_treeitem_parent_id_88f6f9a4_fk_sitetree_treeitem_id")
+  sitetree_tree                        sitetree_tree                          @relation(fields: [tree_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sitetree_treeitem_tree_id_038a4bc7_fk_sitetree_tree_id")
+  other_sitetree_treeitem              sitetree_treeitem[]                    @relation("sitetree_treeitemTositetree_treeitem_parent_id")
+  sitetree_treeitem_access_permissions sitetree_treeitem_access_permissions[]
+
+  @@unique([tree_id, alias], map: "sitetree_treeitem_tree_id_alias_f597fbd9_uniq")
+  @@index([access_guest], map: "sitetree_treeitem_access_guest_09916132")
+  @@index([access_loggedin], map: "sitetree_treeitem_access_loggedin_8a523197")
+  @@index([access_restricted], map: "sitetree_treeitem_access_restricted_e9c87676")
+  @@index([alias], map: "sitetree_treeitem_alias_33dc5690")
+  @@index([alias], map: "sitetree_treeitem_alias_33dc5690_like")
+  @@index([hidden], map: "sitetree_treeitem_hidden_5de28c6e")
+  @@index([inbreadcrumbs], map: "sitetree_treeitem_inbreadcrumbs_ebb24448")
+  @@index([inmenu], map: "sitetree_treeitem_inmenu_ccabc0b0")
+  @@index([insitetree], map: "sitetree_treeitem_insitetree_60c593a5")
+  @@index([parent_id], map: "sitetree_treeitem_parent_id_88f6f9a4")
+  @@index([sort_order], map: "sitetree_treeitem_sort_order_93fd716c")
+  @@index([tree_id], map: "sitetree_treeitem_tree_id_038a4bc7")
+  @@index([url], map: "sitetree_treeitem_url_b91ef35a")
+  @@index([url], map: "sitetree_treeitem_url_b91ef35a_like")
+  @@index([urlaspattern], map: "sitetree_treeitem_urlaspattern_ff432a51")
+}
+
+model sitetree_treeitem_access_permissions {
+  id                Int               @id @default(autoincrement())
+  treeitem_id       Int
+  permission_id     Int
+  auth_permission   auth_permission   @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sitetree_treeitem_ac_permission_id_c6d1d87a_fk_auth_perm")
+  sitetree_treeitem sitetree_treeitem @relation(fields: [treeitem_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sitetree_treeitem_ac_treeitem_id_aedb7367_fk_sitetree_")
+
+  @@unique([treeitem_id, permission_id], map: "sitetree_treeitem_access_treeitem_id_permission_i_a3224a96_uniq")
+  @@index([permission_id], map: "sitetree_treeitem_access_permissions_permission_id_c6d1d87a")
+  @@index([treeitem_id], map: "sitetree_treeitem_access_permissions_treeitem_id_aedb7367")
+}
+
+model ad_combinator {
+  id              String        @id(map: "sponsor_adcombinator_pkey") @db.Uuid
+  is_main         Boolean
+  master_class_id String?       @db.Uuid
+  sponsor_id      String?       @db.Uuid
+  sponsor_type_id String?       @db.Uuid
+  mclass          mclass?       @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_master_class_id_2878a0ad_fk_mastercla")
+  sponsor         sponsor?      @relation(fields: [sponsor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_sponsor_id_fbf5952f_fk_sponsor_sponsor_id")
+  sponsor_type    sponsor_type? @relation(fields: [sponsor_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_adcombinator_sponsor_type_id_6b996e67_fk_sponsor_s")
+
+  @@index([master_class_id], map: "sponsor_adcombinator_master_class_id_2878a0ad")
+  @@index([sponsor_id], map: "sponsor_adcombinator_sponsor_id_fbf5952f")
+  @@index([sponsor_type_id], map: "sponsor_adcombinator_sponsor_type_id_6b996e67")
+}
+
+model ad_single {
+  id         String   @id(map: "sponsor_singlead_pkey") @db.Uuid
+  name       String   @db.VarChar(255)
+  image      String   @db.VarChar(100)
+  link       String   @db.VarChar(255)
+  sponsor_id String   @db.Uuid
+  sponsor    sponsor  @relation(fields: [sponsor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sponsor_singlead_sponsor_id_7b92ddf1_fk_sponsor_sponsor_id")
+  mclass     mclass[]
+
+  @@index([sponsor_id], map: "sponsor_singlead_sponsor_id_7b92ddf1")
+}
+
+model expert {
+  id              String          @id(map: "expert_expert_pkey") @db.Uuid
+  first_name      String          @db.VarChar(100)
+  last_name       String          @db.VarChar(100)
+  slug            String          @unique(map: "expert_expert_slug_key") @db.VarChar(255)
+  main_photo      String          @db.VarChar(100)
+  bio             String
+  career          String
+  personal_life   String
+  statistic       String
+  achievements    String
+  last_content    String
+  category_id     String          @db.Uuid
+  expert_category expert_category @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expert_category_id_ff3c1800_fk_expert_expertcategory_id")
+  expert_image    expert_image[]
+  mclass          mclass[]
+
+  @@index([category_id], map: "expert_expert_category_id_ff3c1800")
+  @@index([slug], map: "expert_expert_slug_1c4843b2_like")
+}
+
+model expert_category {
+  id     String   @id(map: "expert_expertcategory_pkey") @db.Uuid
+  title  String   @db.VarChar(255)
+  slug   String   @unique(map: "expert_category_slug_05c4555c_uniq") @db.VarChar(255)
+  expert expert[]
+
+  @@index([slug], map: "expert_category_slug_05c4555c_like")
+}
+
+model expert_image {
+  id               String  @id(map: "expert_expertimage_pkey") @db.Uuid
+  image            String  @db.VarChar(100)
+  description      String? @db.VarChar(255)
+  is_content_image Boolean
+  expert_id        String  @db.Uuid
+  expert           expert  @relation(fields: [expert_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expert_expertimage_expert_id_03615274_fk_expert_expert_id")
+
+  @@index([expert_id], map: "expert_expertimage_expert_id_03615274")
+}
+
+model mclass {
+  id             String           @id(map: "masterclass_masterclass_pkey") @db.Uuid
+  title          String           @db.VarChar(255)
+  slug           String           @unique(map: "masterclass_masterclass_slug_key") @db.VarChar(255)
+  date_created   DateTime         @db.Date
+  trailer        String           @db.VarChar(255)
+  image          String           @db.VarChar(100)
+  is_dark_theme  Boolean
+  expert_id      String           @db.Uuid
+  single_ad_id   String?          @db.Uuid
+  related_mc_id  String?          @db.Uuid
+  expert         expert           @relation(fields: [expert_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_masterclass_expert_id_0d4e6fa7_fk_expert_expert_id")
+  mclass         mclass?          @relation("mclassTomclass_related_mc_id", fields: [related_mc_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mclass_related_mc_id_bcafffb5_fk_mclass_id")
+  ad_single      ad_single?       @relation(fields: [single_ad_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mclass_single_ad_id_22ab87db_fk_sponsor_adsingle_id")
+  ad_combinator  ad_combinator[]
+  other_mclass   mclass[]         @relation("mclassTomclass_related_mc_id")
+  mclass_targets mclass_targets[]
+  review_review  review_review[]
+  videorelease   videorelease[]
+
+  @@index([expert_id], map: "masterclass_masterclass_expert_id_0d4e6fa7")
+  @@index([single_ad_id], map: "masterclass_masterclass_single_ad_id_42623233")
+  @@index([slug], map: "masterclass_masterclass_slug_ccc13fcf_like")
+  @@index([related_mc_id], map: "mclass_related_mc_id_bcafffb5")
+}
+
+model mclass_target {
+  id             String           @id(map: "masterclass_masterclasstarget_pkey") @db.Uuid
+  title          String           @db.VarChar(255)
+  mclass_targets mclass_targets[]
+}
+
+model mclass_targets {
+  id                   Int           @id(map: "masterclass_masterclass_targets_pkey") @default(autoincrement())
+  masterclass_id       String        @db.Uuid
+  masterclasstarget_id String        @db.Uuid
+  mclass               mclass        @relation(fields: [masterclass_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_masterclass_id_92f057d0_fk_mastercla")
+  mclass_target        mclass_target @relation(fields: [masterclasstarget_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "masterclass_mastercl_masterclasstarget_id_04d02857_fk_mastercla")
+
+  @@unique([masterclass_id, masterclasstarget_id], map: "masterclass_masterclass__masterclass_id_mastercla_d5c5a848_uniq")
+  @@index([masterclass_id], map: "masterclass_masterclass_targets_masterclass_id_92f057d0")
+  @@index([masterclasstarget_id], map: "masterclass_masterclass_targets_masterclasstarget_id_04d02857")
+}
+
+model sponsor {
+  id            String          @id(map: "sponsor_sponsor_pkey") @db.Uuid
+  name          String          @db.VarChar(255)
+  logo          String          @db.VarChar(100)
+  link          String          @db.VarChar(255)
+  color         String          @db.VarChar(18)
+  ad_combinator ad_combinator[]
+  ad_single     ad_single[]
+}
+
+model sponsor_type {
+  id            String          @id(map: "sponsor_sponsortype_pkey") @db.Uuid
+  name          String          @db.VarChar(255)
+  ad_combinator ad_combinator[]
+}
+
+model article {
+  id              String            @id(map: "article_article_pkey") @db.Uuid
+  title           String            @db.VarChar(255)
+  slug            String            @unique(map: "article_article_slug_key") @db.VarChar(255)
+  description     String
+  date_created    DateTime          @db.Date
+  image           String            @db.VarChar(100)
+  article_content article_content[]
+
+  @@index([slug], map: "article_article_slug_b5fb1cdb_like")
+}
+
+model article_content {
+  id         String  @id(map: "article_articlecontent_pkey") @db.Uuid
+  title      String  @db.VarChar(255)
+  text       String
+  article_id String  @db.Uuid
+  article    article @relation(fields: [article_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "article_articleconte_article_id_e2301788_fk_article_a")
+
+  @@index([article_id], map: "article_articlecontent_article_id_e2301788")
+}
+
+model document {
+  id               String             @id(map: "document_document_pkey") @db.Uuid
+  title            String             @db.VarChar(255)
+  slug             String             @unique(map: "document_document_slug_key") @db.VarChar(255)
+  date_created     DateTime           @db.Date
+  document_content document_content[]
+
+  @@index([slug], map: "document_document_slug_400cc96a_like")
+}
+
+model document_content {
+  id          String   @id(map: "document_documentcontent_pkey") @db.Uuid
+  title       String   @db.VarChar(255)
+  text        String
+  document_id String   @db.Uuid
+  document    document @relation(fields: [document_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "document_documentcon_document_id_d105f2d1_fk_document_")
+
+  @@index([document_id], map: "document_documentcontent_document_id_d105f2d1")
+}
+
+model news {
+  id           String   @id(map: "news_news_pkey") @db.Uuid
+  title        String   @db.VarChar(255)
+  slug         String   @unique(map: "news_news_slug_key") @db.VarChar(255)
+  head_text    String?
+  text         String
+  date_created DateTime @db.Date
+
+  @@index([slug], map: "news_news_slug_2b9132f1_like")
+}
+
+model videorelease {
+  id              String   @id(map: "videorelease_videorelease_pkey") @db.Uuid
+  title           String   @db.VarChar(255)
+  slug            String   @unique(map: "videorelease_videorelease_slug_key") @db.VarChar(255)
+  description     String
+  date_created    DateTime @db.Date
+  link            String   @db.VarChar(255)
+  master_class_id String   @db.Uuid
+  mclass          mclass   @relation(fields: [master_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "videorelease_videore_master_class_id_7d98d042_fk_mastercla")
+
+  @@index([master_class_id], map: "videorelease_videorelease_master_class_id_7d98d042")
+  @@index([slug], map: "videorelease_videorelease_slug_ff768872_like")
+}
