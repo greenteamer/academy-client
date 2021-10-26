@@ -1,0 +1,21 @@
+image: node:16.6.1
+pipelines:
+  branches:
+    dev:
+      - step:
+          deployment: test
+          name: Deploy to test server
+          script:
+            - apt-get update -y
+            - apt-get install -y ssh
+            - echo "*** Pull client changes to dev server ***"
+            - ssh root@212.193.49.101 'cd /var/www/client && git checkout dev && git pull'
+            - echo "*** Run deploy script ***"
+            - ssh root@212.193.49.101 'cd /var/www/client && sh deploy.sh'
+            - echo "Deploy step finished"
+    master:
+      - step:
+          name: Deploy client to production server
+          deployment: production
+          script:
+            - echo "Production deploy does not set up"
